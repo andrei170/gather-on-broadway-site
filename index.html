@@ -4,6 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Gather on Broadway | Historic Event Venue | Green Bay, WI</title>
+  <meta property="og:title" content="Gather on Broadway | Historic Event Venue | Green Bay, WI">
+  <meta property="og:description" content="Gather on Broadway is a wedding and event venue inside the 1917 Jones Motor Company building at 139 N Broadway, Green Bay. Owned by Tommy and Jyll Everman. Book your tour today.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://andrei170.github.io/gather-on-broadway-site/">
+  <meta property="og:image" content="https://cdn.prod.website-files.com/648ca0561e0fa7572600693a/6495fd40a58b77d00888ad12_kate_alex%2B22%2Bsilvia%2Brose%2Bphotography%2B132.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://cdn.prod.website-files.com/648ca0561e0fa7572600693a/6495fd40a58b77d00888ad12_kate_alex%2B22%2Bsilvia%2Brose%2Bphotography%2B132.jpg">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='12' fill='%230f172a'/><text x='32' y='44' font-size='38' font-family='Georgia,serif' fill='%23ffffff' text-anchor='middle'>G</text></svg>">
+
 <meta name="description" content="Gather on Broadway is a wedding and event venue inside the 1917 Jones Motor Company building at 139 N Broadway, Green Bay. Owned by Tommy and Jyll Everman. Book your tour today.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -40,6 +49,7 @@ body {
   color: var(--ink);
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 img { display: block; max-width: 100%; }
 a { color: inherit; text-decoration: none; }
@@ -207,29 +217,31 @@ p { color: var(--muted); line-height: 1.72; }
 }
 
 /* ===========================
-   HERO
+   HERO - KEN BURNS
    =========================== */
 .hero {
-  min-height: 100vh;
+  height: 100vh;
+  min-height: 600px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   position: relative;
   overflow: hidden;
-  padding-bottom: 0;
 }
-.hero-bg {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(
-      165deg,
-      rgba(31,26,22,0.72) 0%,
-      rgba(111,51,32,0.55) 40%,
-      rgba(62,89,114,0.45) 80%,
-      rgba(31,26,22,0.80) 100%
-    );
+
+/* Ken Burns animation - only when motion is OK */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes kenBurns {
+    0%   { transform: scale(1.0) translate(0, 0); }
+    50%  { transform: scale(1.08) translate(-1.5%, -1%); }
+    100% { transform: scale(1.0) translate(0, 0); }
+  }
+  .hero-bg-img {
+    animation: kenBurns 20s ease-in-out infinite;
+    will-change: transform;
+  }
 }
+
 .hero-bg-img {
   position: absolute;
   inset: 0;
@@ -237,27 +249,48 @@ p { color: var(--muted); line-height: 1.72; }
   height: 100%;
   object-fit: cover;
   object-position: center 40%;
-  z-index: -1;
+  z-index: 0;
+  display: block;
 }
-/* Warm glow from top left */
-.hero-bg::after {
+
+/* Multi-layer scrim */
+.hero-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(
+      165deg,
+      rgba(31,26,22,0.65) 0%,
+      rgba(111,51,32,0.45) 40%,
+      rgba(62,89,114,0.35) 80%,
+      rgba(31,26,22,0.72) 100%
+    );
+}
+/* Warm radial glow */
+.hero-scrim::before {
   content: "";
   position: absolute;
   inset: 0;
   background: radial-gradient(
     ellipse 70% 55% at 20% 15%,
-    rgba(156,74,42,0.28) 0%,
+    rgba(156,74,42,0.22) 0%,
     transparent 70%
   );
 }
+/* Bottom fade to cream */
+.hero-scrim::after {
+  content: "";
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 160px;
+  background: linear-gradient(to bottom, transparent, var(--cream));
+}
+
 .hero-content {
   position: relative;
   z-index: 2;
   padding: 9rem 0 5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  min-height: 100vh;
 }
 .hero-tag {
   display: inline-block;
@@ -341,16 +374,6 @@ p { color: var(--muted); line-height: 1.72; }
   height: 1px;
   background: rgba(245,237,224,0.4);
 }
-/* Scrim at bottom of hero for smooth transition */
-.hero::after {
-  content: "";
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 120px;
-  background: linear-gradient(to bottom, transparent, var(--cream));
-  pointer-events: none;
-  z-index: 3;
-}
 
 /* ===========================
    TRUST BAND
@@ -405,7 +428,7 @@ p { color: var(--muted); line-height: 1.72; }
   box-shadow: var(--shadow-md);
 }
 .space-photo {
-  height: 200px;
+  height: 220px;
   position: relative;
   overflow: hidden;
   flex-shrink: 0;
@@ -424,6 +447,10 @@ p { color: var(--muted); line-height: 1.72; }
   object-fit: cover;
   object-position: center;
   display: block;
+  transition: transform 0.55s cubic-bezier(.4,0,.2,1);
+}
+.space-card:hover .space-photo img {
+  transform: scale(1.04);
 }
 .space-photo-label {
   position: absolute;
@@ -465,6 +492,54 @@ p { color: var(--muted); line-height: 1.72; }
   margin-top: auto;
 }
 .space-cap svg { flex-shrink: 0; }
+
+/* ===========================
+   FULL-BLEED PHOTO BAND #1
+   (between Spaces and Building)
+   =========================== */
+.photo-band {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  height: clamp(420px, 68vh, 780px);
+  overflow: hidden;
+}
+.photo-band img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 35%;
+  display: block;
+}
+.photo-band-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(31,26,22,0.30) 0%,
+    rgba(31,26,22,0.10) 45%,
+    rgba(31,26,22,0.55) 100%
+  );
+  display: flex;
+  align-items: flex-end;
+  padding: 2.5rem 3rem;
+}
+.photo-band-caption {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.4rem, 2.8vw, 2.1rem);
+  font-weight: 600;
+  color: var(--cream);
+  text-shadow: 0 2px 16px rgba(0,0,0,0.5);
+  max-width: 700px;
+  line-height: 1.25;
+}
+.photo-band-caption em {
+  font-style: italic;
+  color: #f0d5b8;
+}
 
 /* ===========================
    BUILDING / HERITAGE
@@ -599,12 +674,18 @@ p { color: var(--muted); line-height: 1.72; }
 .badge svg { color: var(--brick); flex-shrink: 0; }
 
 /* ===========================
-   GALLERY / ATMOSPHERE
+   FULL-BLEED PHOTO BAND #2
+   (between About and Gallery)
+   =========================== */
+/* reuses .photo-band styles */
+
+/* ===========================
+   GALLERY - ENLARGED LIGHTBOX
    =========================== */
 .gallery-grid {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr;
-  grid-template-rows: 240px 220px;
+  grid-template-rows: 280px 240px;
   gap: 0.9rem;
   margin-top: 2.5rem;
 }
@@ -612,6 +693,7 @@ p { color: var(--muted); line-height: 1.72; }
   border-radius: 8px;
   overflow: hidden;
   position: relative;
+  cursor: zoom-in;
 }
 .gallery-cell:first-child {
   grid-row: span 2;
@@ -629,6 +711,10 @@ p { color: var(--muted); line-height: 1.72; }
   object-fit: cover;
   object-position: center;
   display: block;
+  transition: transform 0.5s cubic-bezier(.4,0,.2,1);
+}
+.gallery-cell:hover img {
+  transform: scale(1.05);
 }
 .gallery-label {
   position: absolute;
@@ -639,18 +725,119 @@ p { color: var(--muted); line-height: 1.72; }
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: rgba(245,237,224,0.85);
+  background: rgba(31,26,22,0.45);
+  padding: 0.25rem 0.5rem;
+  border-radius: 3px;
+  backdrop-filter: blur(3px);
 }
+/* Zoom icon overlay on hover */
+.gallery-cell::after {
+  content: "+";
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) scale(0.7);
+  font-size: 2rem;
+  font-weight: 300;
+  color: rgba(255,255,255,0.9);
+  opacity: 0;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  pointer-events: none;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+.gallery-cell:hover::after {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
 @media (max-width: 760px) {
   .gallery-grid {
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto;
   }
   .gallery-cell:first-child { grid-row: auto; }
-  .gallery-cell { height: 180px; }
+  .gallery-cell { height: 200px; }
 }
 @media (max-width: 480px) {
   .gallery-grid { grid-template-columns: 1fr; }
-  .gallery-cell { height: 200px; }
+  .gallery-cell { height: 220px; }
+}
+
+/* ===========================
+   LIGHTBOX MODAL
+   =========================== */
+.lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: rgba(15,12,10,0.93);
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem;
+  cursor: zoom-out;
+}
+.lightbox.open {
+  display: flex;
+}
+.lightbox-img-wrap {
+  position: relative;
+  max-width: min(90vw, 1100px);
+  max-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.lightbox-img-wrap img {
+  max-width: 100%;
+  max-height: 86vh;
+  object-fit: contain;
+  border-radius: 6px;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.55);
+  cursor: default;
+}
+.lightbox-close {
+  position: absolute;
+  top: -2.4rem; right: 0;
+  background: none;
+  border: none;
+  color: rgba(245,237,224,0.75);
+  font-size: 1.8rem;
+  cursor: pointer;
+  line-height: 1;
+  font-weight: 300;
+  padding: 0.2rem 0.4rem;
+}
+.lightbox-close:hover { color: var(--cream); }
+.lightbox-caption {
+  position: absolute;
+  bottom: -2.2rem; left: 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: rgba(245,237,224,0.55);
+}
+.lightbox-nav {
+  position: absolute;
+  top: 50%; transform: translateY(-50%);
+  background: rgba(247,237,224,0.12);
+  border: 1px solid rgba(245,237,224,0.2);
+  color: rgba(245,237,224,0.85);
+  width: 2.8rem; height: 2.8rem;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  font-size: 1.1rem;
+  line-height: 1;
+  transition: background 0.2s ease;
+}
+.lightbox-nav:hover { background: rgba(247,237,224,0.22); }
+.lightbox-prev { right: calc(100% + 0.8rem); }
+.lightbox-next { left: calc(100% + 0.8rem); }
+@media (max-width: 600px) {
+  .lightbox-prev { right: auto; left: 0.3rem; }
+  .lightbox-next { left: auto; right: 0.3rem; }
 }
 
 /* ===========================
@@ -857,7 +1044,7 @@ p { color: var(--muted); line-height: 1.72; }
 }
 
 /* ===========================
-   SCROLL REVEAL
+   SCROLL REVEAL + MOTION
    =========================== */
 @media (prefers-reduced-motion: no-preference) {
   .reveal {
@@ -933,7 +1120,7 @@ p { color: var(--muted); line-height: 1.72; }
       <a href="#about">Our Story</a>
       <a href="#gallery">Gallery</a>
       <a href="#contact">Contact</a>
-      <a href="tel:+14142000000" class="nav-cta">Book a Tour</a>
+      <a href="https://gatheronbroadway.com" target="_blank" rel="noopener" class="nav-cta">Book a Tour</a>
     </nav>
     <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
       <svg id="icon-menu" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
@@ -950,17 +1137,16 @@ p { color: var(--muted); line-height: 1.72; }
 </header>
 
 <!-- ==============================
-     HERO
+     HERO - KEN BURNS
      ============================== -->
 <section class="hero" id="top" aria-label="Hero">
-  <div class="hero-bg" aria-hidden="true">
-    <img class="hero-bg-img"
-      src="https://cdn.prod.website-files.com/648ca0561e0fa7572600693a/6495fd40a58b77d00888ad12_kate_alex%2B22%2Bsilvia%2Brose%2Bphotography%2B132.jpg"
-      alt="Wedding reception inside the 1917 Jones Motor Company building at Gather on Broadway"
-      fetchpriority="high">
-  </div>
+  <img class="hero-bg-img"
+    src="https://cdn.prod.website-files.com/648ca0561e0fa7572600693a/6495fd40a58b77d00888ad12_kate_alex%2B22%2Bsilvia%2Brose%2Bphotography%2B132.jpg"
+    alt="Wedding reception inside the 1917 Jones Motor Company building at Gather on Broadway"
+    fetchpriority="high">
+  <div class="hero-scrim" aria-hidden="true"></div>
   <div class="container hero-content">
-    <span class="hero-tag">Est. 2016, 139 N Broadway, Green Bay WI</span>
+    <span class="hero-tag">Est. 2016 &nbsp;|&nbsp; 139 N Broadway, Green Bay WI</span>
     <h1>A century-old building.<br>Every gathering, <em>yours.</em></h1>
     <p class="hero-sub">
       Inside the 1917 Jones Motor Company building, Tommy and Jyll Everman built a wedding and event venue unlike anything else in Northeast Wisconsin. Original brick, 20-foot wood ceilings, exposed steel trusses, and a chef who hosts Fox 11 Living.
@@ -1112,6 +1298,19 @@ p { color: var(--muted); line-height: 1.72; }
     </div>
   </div>
 </section>
+
+<!-- ==============================
+     FULL-BLEED PHOTO BAND #1
+     Main hall reception photo
+     ============================== -->
+<div class="photo-band" aria-label="Main reception hall inside Gather on Broadway" data-lightbox-src="https://cdn.prod.website-files.com/648ca0561e0fa7572600693a/649eddf5e715da6b1ec303a3_DSC06817.jpg">
+  <img src="https://cdn.prod.website-files.com/648ca0561e0fa7572600693a/649eddf5e715da6b1ec303a3_DSC06817.jpg"
+    alt="Main reception hall inside Gather on Broadway showing original brick walls and long banquet tables beneath 20-foot ceilings"
+    loading="lazy">
+  <div class="photo-band-scrim">
+    <p class="photo-band-caption">Original brick walls. 20-foot ceilings.<br><em>Every gathering deserves a room with a story.</em></p>
+  </div>
+</div>
 
 <!-- ==============================
      THE BUILDING / HERITAGE
@@ -1280,6 +1479,19 @@ p { color: var(--muted); line-height: 1.72; }
 </section>
 
 <!-- ==============================
+     FULL-BLEED PHOTO BAND #2
+     Evening atmosphere / ceilings
+     ============================== -->
+<div class="photo-band" aria-label="Evening reception atmosphere inside Gather on Broadway">
+  <img src="https://cdn.prod.website-files.com/648ca0561e0fa7572600693a/698b8447f48c0610b739358f_DSC09687-HDR.jpg"
+    alt="Exposed steel trusses and 20-foot wood ceilings lit for an evening reception at Gather on Broadway"
+    loading="lazy">
+  <div class="photo-band-scrim">
+    <p class="photo-band-caption">The trusses. The light. <em>The room that photographs itself.</em></p>
+  </div>
+</div>
+
+<!-- ==============================
      GALLERY / ATMOSPHERE
      ============================== -->
 <section class="section" id="gallery" aria-labelledby="gallery-heading">
@@ -1287,44 +1499,79 @@ p { color: var(--muted); line-height: 1.72; }
     <div class="reveal text-center" style="margin-bottom: 0.5rem;">
       <span class="eyebrow">The Space</span>
       <h2 id="gallery-heading">Inside Gather on Broadway.</h2>
+      <p style="max-width:520px; margin:0.5rem auto 0; font-size:0.9rem;">Click any photo to view full size.</p>
     </div>
     <div class="gallery-grid">
-      <div class="gallery-cell g1 reveal" aria-label="Main hall of Gather on Broadway with original brick walls and wedding reception setup">
-        <img src="https://cdn.prod.website-files.com/648ca0561e0fa7572600693a/649eddf5e715da6b1ec303a3_DSC06817.jpg"
-          alt="Main reception hall inside Gather on Broadway, with original brick walls and long banquet tables"
-          loading="lazy">
-        <span class="gallery-label">Main Hall</span>
-      </div>
-      <div class="gallery-cell g2 reveal reveal-delay-1" aria-label="20-foot wood ceilings and exposed steel trusses inside Gather on Broadway">
-        <img src="https://cdn.prod.website-files.com/648ca0561e0fa7572600693a/698b8447f48c0610b739358f_DSC09687-HDR.jpg"
-          alt="20-foot wood ceilings and exposed steel trusses inside the 1917 building at Gather on Broadway"
-          loading="lazy">
-        <span class="gallery-label">Ceilings + Trusses</span>
-      </div>
-      <div class="gallery-cell g3 reveal reveal-delay-2" aria-label="Wedding reception setup inside Gather on Broadway">
+
+      <div class="gallery-cell g1 reveal"
+        aria-label="Wedding reception setup inside Gather on Broadway - click to enlarge"
+        data-lb-src="https://cdn.prod.website-files.com/648ca0561e0fa7572600693a/662185f9ada6269f418a38ea_kennedy%26parker%2B23%2Bwonderland%2Bphotography%2B237.jpg"
+        data-lb-cap="Wedding Setup">
         <img src="https://cdn.prod.website-files.com/648ca0561e0fa7572600693a/662185f9ada6269f418a38ea_kennedy%26parker%2B23%2Bwonderland%2Bphotography%2B237.jpg"
           alt="Wedding reception with floral centerpieces inside Gather on Broadway"
           loading="lazy">
         <span class="gallery-label">Wedding Setup</span>
       </div>
-      <div class="gallery-cell g4 reveal reveal-delay-3" aria-label="Intimate dinner event layout inside Gather on Broadway">
+
+      <div class="gallery-cell g2 reveal reveal-delay-1"
+        aria-label="Main hall at Gather on Broadway - click to enlarge"
+        data-lb-src="https://cdn.prod.website-files.com/648ca0561e0fa7572600693a/649eddf5e715da6b1ec303a3_DSC06817.jpg"
+        data-lb-cap="Main Hall">
+        <img src="https://cdn.prod.website-files.com/648ca0561e0fa7572600693a/649eddf5e715da6b1ec303a3_DSC06817.jpg"
+          alt="Main reception hall inside Gather on Broadway with original brick walls and long banquet tables"
+          loading="lazy">
+        <span class="gallery-label">Main Hall</span>
+      </div>
+
+      <div class="gallery-cell g3 reveal reveal-delay-2"
+        aria-label="Intimate dinner setup - click to enlarge"
+        data-lb-src="https://cdn.prod.website-files.com/648ca0561e0fa7572600693a/649eddf5e26728dfd1bf318b_KaseyandBen-1.jpg"
+        data-lb-cap="Intimate Dinner">
         <img src="https://cdn.prod.website-files.com/648ca0561e0fa7572600693a/649eddf5e26728dfd1bf318b_KaseyandBen-1.jpg"
           alt="Intimate dinner event inside Gather on Broadway with candlelight and brick walls"
           loading="lazy">
         <span class="gallery-label">Intimate Dinner</span>
       </div>
-      <div class="gallery-cell g5 reveal reveal-delay-4" aria-label="Evening reception lighting inside Gather on Broadway">
+
+      <div class="gallery-cell g4 reveal reveal-delay-3"
+        aria-label="Evening reception atmosphere - click to enlarge"
+        data-lb-src="https://cdn.prod.website-files.com/64931fff91a3cd4882904175/67782e4be62a4e9ca7a6d73f_image3%20(1).jpeg"
+        data-lb-cap="Evening Lighting">
         <img src="https://cdn.prod.website-files.com/64931fff91a3cd4882904175/67782e4be62a4e9ca7a6d73f_image3%20(1).jpeg"
           alt="Evening reception atmosphere inside Gather on Broadway with warm lighting"
           loading="lazy">
         <span class="gallery-label">Evening Lighting</span>
       </div>
+
+      <div class="gallery-cell g5 reveal reveal-delay-4"
+        aria-label="Ceilings and trusses - click to enlarge"
+        data-lb-src="https://cdn.prod.website-files.com/648ca0561e0fa7572600693a/698b8447f48c0610b739358f_DSC09687-HDR.jpg"
+        data-lb-cap="Ceilings + Trusses">
+        <img src="https://cdn.prod.website-files.com/648ca0561e0fa7572600693a/698b8447f48c0610b739358f_DSC09687-HDR.jpg"
+          alt="20-foot wood ceilings and exposed steel trusses inside the 1917 building at Gather on Broadway"
+          loading="lazy">
+        <span class="gallery-label">Ceilings + Trusses</span>
+      </div>
+
     </div>
     <p style="margin-top:1.2rem; font-size:0.82rem; text-align:center; color:var(--muted);">
       Photos from Gather on Broadway. More at <a href="https://www.gatheronbroadway.com" target="_blank" rel="noopener" style="color:var(--brick);">gatheronbroadway.com</a>
     </p>
   </div>
 </section>
+
+<!-- ==============================
+     LIGHTBOX MODAL
+     ============================== -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo lightbox">
+  <div class="lightbox-img-wrap" id="lightbox-wrap">
+    <button class="lightbox-close" id="lightbox-close" aria-label="Close photo">&times;</button>
+    <img src="" alt="" id="lightbox-img">
+    <span class="lightbox-caption" id="lightbox-cap"></span>
+    <button class="lightbox-nav lightbox-prev" id="lightbox-prev" aria-label="Previous photo">&#8592;</button>
+    <button class="lightbox-nav lightbox-next" id="lightbox-next" aria-label="Next photo">&#8594;</button>
+  </div>
+</div>
 
 <!-- ==============================
      SOCIAL PROOF / COMMUNITY
@@ -1552,25 +1799,21 @@ p { color: var(--muted); line-height: 1.72; }
   /* --- Sticky header condense on scroll --- */
   var header = document.getElementById('site-header');
   function onScroll() {
-    if (window.scrollY > 60) {
-      header.classList.add('scrolled');
-    } else {
-      header.classList.remove('scrolled');
-    }
+    header.classList.toggle('scrolled', window.scrollY > 60);
   }
   window.addEventListener('scroll', onScroll, { passive: true });
 
   /* --- Mobile nav toggle --- */
-  var toggle = document.getElementById('nav-toggle');
+  var toggle   = document.getElementById('nav-toggle');
   var navLinks = document.getElementById('nav-links');
-  var iconMenu = document.getElementById('icon-menu');
+  var iconMenu  = document.getElementById('icon-menu');
   var iconClose = document.getElementById('icon-close');
 
   toggle.addEventListener('click', function () {
     var isOpen = navLinks.classList.toggle('open');
     toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-    iconMenu.style.display  = isOpen ? 'none'  : '';
-    iconClose.style.display = isOpen ? ''      : 'none';
+    iconMenu.style.display  = isOpen ? 'none' : '';
+    iconClose.style.display = isOpen ? ''     : 'none';
     document.body.style.overflow = isOpen ? 'hidden' : '';
   });
 
@@ -1584,26 +1827,91 @@ p { color: var(--muted); line-height: 1.72; }
     });
   });
 
-  /* --- Scroll reveal (only when motion is allowed) --- */
+  /* --- Scroll reveal (respects prefers-reduced-motion) --- */
   var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (!prefersReducedMotion) {
-    var revealEls = document.querySelectorAll(
-      '.reveal, .reveal-left, .reveal-right'
-    );
+    var revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
     if ('IntersectionObserver' in window) {
-      var observer = new IntersectionObserver(function (entries) {
+      var revealObs = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
           if (entry.isIntersecting) {
             entry.target.classList.add('visible');
-            observer.unobserve(entry.target);
+            revealObs.unobserve(entry.target);
           }
         });
       }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-      revealEls.forEach(function (el) { observer.observe(el); });
+      revealEls.forEach(function (el) { revealObs.observe(el); });
     } else {
       revealEls.forEach(function (el) { el.classList.add('visible'); });
     }
   }
+
+  /* --- Lightbox --- */
+  var lightbox     = document.getElementById('lightbox');
+  var lbImg        = document.getElementById('lightbox-img');
+  var lbCap        = document.getElementById('lightbox-cap');
+  var lbClose      = document.getElementById('lightbox-close');
+  var lbPrev       = document.getElementById('lightbox-prev');
+  var lbNext       = document.getElementById('lightbox-next');
+  var lbWrap       = document.getElementById('lightbox-wrap');
+
+  // Collect all gallery cells that have data-lb-src
+  var galleryCells = Array.from(document.querySelectorAll('[data-lb-src]'));
+  var currentIdx   = 0;
+
+  function openLightbox(idx) {
+    currentIdx = idx;
+    var cell = galleryCells[idx];
+    lbImg.src = cell.getAttribute('data-lb-src');
+    lbImg.alt = cell.querySelector('img') ? cell.querySelector('img').alt : '';
+    lbCap.textContent = cell.getAttribute('data-lb-cap') || '';
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    lbClose.focus();
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('open');
+    document.body.style.overflow = '';
+    lbImg.src = '';
+  }
+
+  function showNext() {
+    currentIdx = (currentIdx + 1) % galleryCells.length;
+    openLightbox(currentIdx);
+  }
+
+  function showPrev() {
+    currentIdx = (currentIdx - 1 + galleryCells.length) % galleryCells.length;
+    openLightbox(currentIdx);
+  }
+
+  galleryCells.forEach(function (cell, idx) {
+    cell.addEventListener('click', function () { openLightbox(idx); });
+    cell.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLightbox(idx); }
+    });
+    cell.setAttribute('tabindex', '0');
+    cell.setAttribute('role', 'button');
+  });
+
+  lbClose.addEventListener('click', closeLightbox);
+  lbPrev.addEventListener('click', function (e) { e.stopPropagation(); showPrev(); });
+  lbNext.addEventListener('click', function (e) { e.stopPropagation(); showNext(); });
+
+  // Close on backdrop click (not on image)
+  lightbox.addEventListener('click', function (e) {
+    if (e.target === lightbox) closeLightbox();
+  });
+
+  // Keyboard navigation
+  document.addEventListener('keydown', function (e) {
+    if (!lightbox.classList.contains('open')) return;
+    if (e.key === 'Escape')      closeLightbox();
+    if (e.key === 'ArrowRight')  showNext();
+    if (e.key === 'ArrowLeft')   showPrev();
+  });
+
 })();
 </script>
 
